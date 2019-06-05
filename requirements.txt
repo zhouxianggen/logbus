@@ -1,0 +1,5 @@
+requests
+sqlalchemy
+mysqlclient
+tornado
+git+https://github.com/zhouxianggen/pyobject.git

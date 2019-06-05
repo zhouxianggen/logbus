@@ -1,0 +1,82 @@
+{
+    "index_patterns": ["applog_*"],
+    "order" : 2,
+    "settings": {
+        "number_of_shards": 1, 
+        "number_of_replicas": 0
+    },
+    "mappings": {
+        "dynamic_date_formats": [
+            "strict_date_optional_time", 
+            "yyyy-MM-dd HH:mm:ss,SSS", 
+            "yyyy-MM-dd HH:mm:ss"],
+
+        "properties": {
+            // 预定义字段
+            "app_id": { "type": "keyword" }, 
+            "service_id": { "type": "keyword" },
+            "trace_id": { "type": "keyword" }, 
+            "level": { "type": "keyword" }, 
+            "class": { "type": "keyword" }, 
+            "func": { "type": "keyword" }, 
+            "pid": { "type": "keyword" }, 
+            "thread": { "type": "keyword" }, 
+            "date": { "type": "date" }, 
+            "took": { "type": "float" },
+            "content": { 
+                "type": "text", 
+                "analyzer": "ik_max_word",
+                "search_analyzer": "ik_smart"
+            }, 
+            "message": {
+                "type": "text", 
+                "analyzer": "ik_max_word",
+                "search_analyzer": "ik_smart"
+            }
+        },
+        
+        // 自定义字段
+        "dynamic_templates": [
+            {
+                "postfix_i": {
+                    "match": "*_i",
+                    "mapping": { "type": "long" }
+                }
+            },
+            {
+                "postfix_f": {
+                    "match": "*_f",
+                    "mapping": { "type": "float" }
+                }
+            },
+            {
+                "postfix_s": {
+                    "match": "*_s",
+                    "mapping": { "type": "keyword" }
+                }
+            },
+            {
+                "postfix_txt": {
+                    "match": "*_txt",
+                    "mapping": { 
+                        "type": "float", 
+                        "analyzer": "ik_max_word",
+                        "search_analyzer": "ik_smart"
+                    }
+                }
+            },
+            {
+                "postfix_dt": {
+                    "match":   "*_dt",
+                    "mapping": { "type": "date" }
+                }
+            },
+            {
+                "postfix_f": {
+                    "match":   "*_geo",
+                    "mapping": { "type": "geo_point" }
+                }
+            }
+        ]
+    }
+}
